@@ -9,13 +9,16 @@ from tqdm import tqdm_notebook
 from collections import defaultdict
 
 
+#input size
 INPUT_SIZE = (1, 28, 28)
+
+#data Augment 
 transforms = torchvision.transforms.Compose([
 	torchvision.transforms.RandomCrop(INPUT_SIZE[1:], padding=2),
 	torchvision.transforms.ToTensor(),
 ])
 
-
+#load data
 trn_dataset = torchvision.datasets.MNIST('D:/data/MNIST', train=True, download=True, transform=transforms)
 tst_dataset = torchvision.datasets.MNIST('D:/data/MNIST', train=False, download=True, transform=transforms)
 #print('Images for training: %d' % len(trn_dataset))
@@ -25,7 +28,7 @@ BATCH_SIZE = 3 # Batch size not specified in the paper
 trn_loader = torch.utils.data.DataLoader(trn_dataset, BATCH_SIZE, shuffle=True)
 tst_loader = torch.utils.data.DataLoader(tst_dataset, BATCH_SIZE, shuffle=False)
 
-
+#first step Convolutional operation
 class Conv1(torch.nn.Module):
 	def __init__(self, in_channels, out_channels=256, kernel_size=9):
 		super(Conv1, self).__init__()
@@ -36,7 +39,7 @@ class Conv1(torch.nn.Module):
 		x = self.conv(x)
 		x = self.activation(x)
 		return x
-
+#primary Capsule 
 class PrimaryCapsules(torch.nn.Module):
 	def __init__(self, input_shape=(256, 20, 20), capsule_dim=8,
 			out_channels=32, kernel_size=9, stride=2):
@@ -62,7 +65,7 @@ class PrimaryCapsules(torch.nn.Module):
 		#print(x.shape)
 		return x
 
-
+#routing operation, 
 class Routing(torch.nn.Module):
 	def __init__(self, caps_dim_before=8, caps_dim_after=16,
 						n_capsules_before=(6 * 6 * 32), n_capsules_after=10):
