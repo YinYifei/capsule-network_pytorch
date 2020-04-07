@@ -1,1 +1,2 @@
 # capsule-network_pytorch
+本代码主要结合hilton于NIPS 2017年发表的 “DynamicRoutingBetweenCapsules”论文为基础，胶囊网络代码pytorch
